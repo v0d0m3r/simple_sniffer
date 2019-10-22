@@ -53,17 +53,17 @@ void print_usage()
 
 /*----------------------------------------------------------------------------*/
 
-static const char*const short_options = "c:hi:p";
-static const char*const interface_option = "interface";
-static const char*const no_promiscuous_mode = "no-promiscuous-mode";
+#define SHORT_OPTIONS "c:hi:p"
+#define INTERFACE_OPTION "interface"
+#define NO_PROMISCUOUS_MODE "no-promiscuous-mode"
 
 /*----------------------------------------------------------------------------*/
 
 static const struct option longopts[] = {
     { "config-file", required_argument, NULL, 'c' },
     { "help", no_argument, NULL, 'h' },
-    { interface_option, required_argument, NULL, 'i' },
-    { no_promiscuous_mode, no_argument, NULL, 'p' },
+    { INTERFACE_OPTION, required_argument, NULL, 'i' },
+    { NO_PROMISCUOUS_MODE, no_argument, NULL, 'p' },
     { NULL, 0, NULL, 0 }
 };
 
@@ -74,7 +74,7 @@ static const struct option longopts[] = {
  * Postconditions: *val is 0-terminated string
  * Do exit from program if it'll get runtime error
 */
-void set_value_str(char**const val, const struct json_object*const jobj,
+void set_value_str(char**const val, struct json_object*const jobj,
                    const char*const key)
 {
     assert((val!=NULL && jobj!=NULL && key!=NULL)
@@ -99,7 +99,7 @@ void set_value_str(char**const val, const struct json_object*const jobj,
  * Postconditions: none
  * Do exit from program if it'll get runtime error
 */
-int get_value_int(const struct json_object*const jobj, const char*const key)
+int get_value_int(struct json_object*const jobj, const char*const key)
 {
     assert((jobj!=NULL && key!=NULL)
            && "set_value_int(): invalid arg!");
@@ -138,12 +138,11 @@ void json_parsing(Settings* const sets, const char*const str)
            && "json_parsing(): invalid arg!");
     struct json_object* object = json_tokener_parse(str);
     if (!object)
-        merror("json_parsing(): unable to parse contents of %s: %s\n",
-               str, json_util_get_last_err());
+        merror("json_parsing(): unable to parse contents of %s\n", str);
 
-    set_value_str(&sets->device, object, interface_option);
+    set_value_str(&sets->device, object, INTERFACE_OPTION);
     set_value_str(&sets->filter, object, "filter");
-    sets->pflag = get_value_int(object, no_promiscuous_mode);
+    sets->pflag = get_value_int(object, NO_PROMISCUOUS_MODE);
 
     json_object_put(object);
 }
@@ -229,10 +228,10 @@ void handle_options(int argc, char** argv, Settings* const sets)
            && "handle_options(): invalid args!");
     int op = 0;
     while (
-        (op = getopt_long(argc, argv, short_options, longopts, NULL)) != -1)
+        (op = getopt_long(argc, argv, SHORT_OPTIONS, longopts, NULL)) != -1)
         switch (op) {
         case 'c':
-            handle_config_file(sets, optarg);            
+            handle_config_file(sets, optarg);
             return;
         case 'h':
             print_usage();
