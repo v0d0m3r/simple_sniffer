@@ -1,5 +1,5 @@
 {
-  "interface": "enp0s7",
-  "no-promiscuous-mode": 1,
-  "filter": ""
+  "interface": "enp1s0",
+  "no-promiscuous-mode": 0,
+  "filter": "udp dst port 53"
 }

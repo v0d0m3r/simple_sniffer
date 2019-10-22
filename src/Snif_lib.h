@@ -13,11 +13,17 @@ typedef enum {
 } Status_exit_codes_t;
 
 /*----------------------------------------------------------------------------*/
-
+/* Tell us that's error was occured and quit
+ * Preconditions:  fmt != NULL
+ * Postconditions: none
+ */
 void merror(const char* fmt, ...);
 
 /*----------------------------------------------------------------------------*/
-
+/* Tell us that's warning was occured
+ * Preconditions:  fmt != NULL
+ * Postconditions: none
+ */
 void mwarning(const char *fmt, ...);
 
 /*----------------------------------------------------------------------------*/
